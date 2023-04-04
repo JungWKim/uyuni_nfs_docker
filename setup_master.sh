@@ -1,7 +1,6 @@
 #---------------
 # 1. run without sudo
 # 2. you need nfs-server for uyuni-infra
-# 3. After you deploy uyuni suite, login docker then restart docker daemon
 #---------------
 
 #!/bin/bash
@@ -12,6 +11,8 @@ NFS_IP=
 # if asustor is nfs server, nfs_path will be like, "/volume1/****"
 NFS_PATH=/kube_storage
 PV_SIZE=
+DOCKER_USER=
+DOCKER_PW=
 
 cd ~
 
@@ -127,6 +128,9 @@ echo "source <(kubeadm completion bash)" >> ${HOME}/.bashrc
 
 echo "source <(kubectl completion bash)" | sudo tee -a /root/.bashrc
 echo "source <(kubeadm completion bash)" | sudo tee -a /root/.bashrc
+
+# login docker account
+sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
 
 # install nvidia-container-toolkit
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
