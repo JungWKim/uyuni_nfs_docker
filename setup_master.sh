@@ -96,7 +96,6 @@ sudo docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_PW}
 
 # ssh configuration
 ssh-keygen -t rsa
-
 ssh-copy-id -i ~/.ssh/id_rsa ${USER}@${IP}
 
 # k8s installation via kubespray
@@ -120,6 +119,7 @@ sed -i "s/# docker_cgroup_driver: systemd/docker_cgroup_driver: systemd/g" inven
 
 # automatically disable swap partition
 ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml -K
+sleep 180
 cd ~
 
 # enable kubectl in admin account and root
