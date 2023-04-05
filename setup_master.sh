@@ -56,6 +56,14 @@ sudo sh ~/NVIDIA-Linux-x86_64-525.89.02.run
 nvidia-smi
 nvidia-smi -L
 
+# install nvidia-container-toolkit
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt-get update \
+    && sudo apt-get install -y nvidia-container-toolkit
+
 # disable firewall
 sudo systemctl stop ufw
 sudo systemctl disable ufw
@@ -131,14 +139,6 @@ echo "source <(kubeadm completion bash)" | sudo tee -a /root/.bashrc
 
 # login docker account
 sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
-
-# install nvidia-container-toolkit
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-sudo apt-get update \
-    && sudo apt-get install -y nvidia-container-toolkit
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
