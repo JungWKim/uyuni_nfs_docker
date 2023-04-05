@@ -93,7 +93,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 
 # login docker account
 sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
-systemctl restart docker
+sudo systemctl restart docker
 sleep 120
 
 # install nvidia-container-toolkit
@@ -116,7 +116,7 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 }
 EOF
 
-systemctl restart docker
+sudo systemctl restart docker
 sleep 180
 
 # ssh configuration
