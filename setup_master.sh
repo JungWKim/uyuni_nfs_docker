@@ -56,26 +56,6 @@ sudo sh ~/NVIDIA-Linux-x86_64-525.89.02.run
 nvidia-smi
 nvidia-smi -L
 
-# install nvidia-container-toolkit
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-sudo apt-get update \
-    && sudo apt-get install -y nvidia-container-toolkit
-
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-   "default-runtime": "nvidia",
-   "runtimes": {
-      "nvidia": {
-            "path": "/usr/bin/nvidia-container-runtime",
-            "runtimeArgs": []
-      }
-   }
-}
-EOF
-
 # disable firewall
 sudo systemctl stop ufw
 sudo systemctl disable ufw
@@ -101,10 +81,10 @@ EOF
 sudo sysctl --system
 
 # download docker gpg key
-sudo apt update
-sudo apt install -y ca-certificates curl gnupg lsb-release
-sudo mkdir -m 0755 -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+#sudo apt update
+#sudo apt install -y ca-certificates curl gnupg lsb-release
+#sudo mkdir -m 0755 -p /etc/apt/keyrings
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
 # ssh configuration
 ssh-keygen -t rsa
@@ -148,6 +128,26 @@ echo "source <(kubeadm completion bash)" | sudo tee -a /root/.bashrc
 
 # login docker account
 sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
+
+# install nvidia-container-toolkit
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt-get update \
+    && sudo apt-get install -y nvidia-container-toolkit
+
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+   "default-runtime": "nvidia",
+   "runtimes": {
+      "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+      }
+   }
+}
+EOF
 
 # install helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
