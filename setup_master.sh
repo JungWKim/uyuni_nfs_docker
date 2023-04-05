@@ -92,7 +92,32 @@ sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # login docker account
-sudo docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_PW}
+sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
+systemctl restart docker
+sleep 120
+
+# install nvidia-container-toolkit
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt-get update \
+    && sudo apt-get install -y nvidia-container-toolkit
+
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+   "default-runtime": "nvidia",
+   "runtimes": {
+      "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+      }
+   }
+}
+EOF
+
+systemctl restart docker
+sleep 180
 
 # ssh configuration
 ssh-keygen -t rsa
@@ -133,29 +158,6 @@ echo "source <(kubeadm completion bash)" >> ${HOME}/.bashrc
 
 echo "source <(kubectl completion bash)" | sudo tee -a /root/.bashrc
 echo "source <(kubeadm completion bash)" | sudo tee -a /root/.bashrc
-
-# install nvidia-container-toolkit
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add - \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-sudo apt-get update \
-    && sudo apt-get install -y nvidia-container-toolkit
-
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-   "default-runtime": "nvidia",
-   "runtimes": {
-      "nvidia": {
-            "path": "/usr/bin/nvidia-container-runtime",
-            "runtimeArgs": []
-      }
-   }
-}
-EOF
-
-systemctl restart docker
-sleep 180
 
 # install helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
