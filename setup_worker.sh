@@ -6,11 +6,6 @@
 #!/bin/bash
 
 LOCAL_FILE_COPY=no
-IP=
-NFS_IP=
-# if asustor is nfs server, nfs_path will be like, "/volume1/****"
-NFS_PATH=/kube_storage
-PV_SIZE=
 DOCKER_USER=
 DOCKER_PW=
 
@@ -80,14 +75,21 @@ EOF
 
 sudo sysctl --system
 
-# download docker gpg key
+# install docker
 sudo apt update
 sudo apt install -y ca-certificates curl gnupg lsb-release
 sudo mkdir -m 0755 -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # login docker account
 sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
+systemctl restart docker
+sleep 120
 
 # install nvidia-container-toolkit
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
@@ -111,29 +113,3 @@ EOF
 
 systemctl restart docker
 sleep 180
-
-# install helm
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-
-# install helmfile
-wget https://github.com/helmfile/helmfile/releases/download/v0.150.0/helmfile_0.150.0_linux_amd64.tar.gz
-tar -zxvf helmfile_0.150.0_linux_amd64.tar.gz
-sudo mv helmfile /usr/bin/
-rm LICENSE && rm README.md && rm helmfile_0.150.0_linux_amd64.tar.gz
-
-# deploy uyuni infra - this process consumes 33G.
-git clone -b develop https://github.com/xiilab/Uyuni_Deploy.git
-cd ~/Uyuni_Deploy
-
-sed -i "s/192.168.56.13/${NFS_IP}/g" environments/default/values.yaml
-sed -i "s:/kube_storage:${NFS_PATH}:g" environments/default/values.yaml
-sed -i "s/192.168.56.11/${IP}/g" environments/default/values.yaml
-cp ~/.kube/config applications/uyuni-suite/uyuni-suite/config
-sed -i "s/127.0.0.1/${IP}/g" applications/uyuni-suite/uyuni-suite/config
-sed -i "s/5/${PV_SIZE}/g" applications/uyuni-suite/values.yaml.gotmpl
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helmfile --environment default -l type=base sync
-helmfile --environment default -l type=app sync
-cd ~
