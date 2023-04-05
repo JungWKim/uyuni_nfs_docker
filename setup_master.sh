@@ -64,6 +64,18 @@ distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
 sudo apt-get update \
     && sudo apt-get install -y nvidia-container-toolkit
 
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+   "default-runtime": "nvidia",
+   "runtimes": {
+      "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+      }
+   }
+}
+EOF
+
 # disable firewall
 sudo systemctl stop ufw
 sudo systemctl disable ufw
@@ -93,9 +105,6 @@ sudo apt update
 sudo apt install -y ca-certificates curl gnupg lsb-release
 sudo mkdir -m 0755 -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
-# only up to this line for additional worker nodes
-#----------------------------------------------------------------
 
 # ssh configuration
 ssh-keygen -t rsa
@@ -139,21 +148,6 @@ echo "source <(kubeadm completion bash)" | sudo tee -a /root/.bashrc
 
 # login docker account
 sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
-
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-   "default-runtime": "nvidia",
-   "runtimes": {
-      "nvidia": {
-            "path": "/usr/bin/nvidia-container-runtime",
-            "runtimeArgs": []
-      }
-   }
-}
-EOF
-
-systemctl restart docker
-sleep 180
 
 # install helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
