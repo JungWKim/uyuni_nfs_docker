@@ -17,14 +17,12 @@
 ### 2. In master node, edit $HOME/kubespray/inventory/mycluster/host.yaml.
 ### 3. copy master's administrator's public key to worker node
 ### 4. add worker node into k8s using ansible command
-### 5. In every node, copy config.toml to /etc/containerd/config & restart containerd
-### 6. In uyuni dashboard, add worker node.
+### 5. In uyuni dashboard, add worker node.
 -----------------------
 ## how to remove uyuni-infra and uyuni-suite completely
-### 1. kustomize build overlays/test | kubectl delete -f -
+### 1. helmfile --environment test -l type=app destroy
 ### 2. helmfile --environment test -l type=base destroy
-### 3. delete every pvcs, pvs and files in nfs server
-### 4. delete every configmap, secrets.
+### 3. delete every pvcs, pvs and files, configmaps, secrets in nfs server
 ----------------------
 ## keycloak domain : http://???.???.???.???:30090
 ### default ID : Admin
