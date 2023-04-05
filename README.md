@@ -26,4 +26,4 @@
 ----------------------
 ## keycloak domain : http://???.???.???.???:30090
 ### default ID : Admin
-### default PW : xiilabPassword3#
+### default PW : xiilabPassword3# or keycloak12345
