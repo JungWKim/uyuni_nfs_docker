@@ -11,8 +11,6 @@ NFS_IP=
 # if asustor is nfs server, nfs_path will be like, "/volume1/****"
 NFS_PATH=/kube_storage
 PV_SIZE=
-DOCKER_USER=
-DOCKER_PW=
 
 cd ~
 
@@ -90,10 +88,6 @@ echo \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# login docker account
-sudo docker login -u ${DOCKER_USER} -p ${DOCKER_PW}
-sudo systemctl restart docker
 
 # install nvidia-container-toolkit
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
