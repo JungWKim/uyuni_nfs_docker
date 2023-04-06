@@ -5,8 +5,6 @@
 
 #!/bin/bash
 
-LOCAL_FILE_COPY=no
-
 cd ~
 
 # disable firewall
