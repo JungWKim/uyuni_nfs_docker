@@ -51,7 +51,7 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 EOF
 
 sudo systemctl restart docker
-sleep 180
+sleep 30
 
 # ssh configuration
 ssh-keygen -t rsa
