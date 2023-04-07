@@ -63,7 +63,7 @@ git clone -b release-2.19 https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
 pip install -r requirements.txt
 
-echo "export PATH=${HOME}/.local/bin:${PATH}" | sudo tee -a ${HOME}/.bashrc > /dev/null
+echo "export PATH=${HOME}/.local/bin:${PATH}" | sudo tee ${HOME}/.bashrc > /dev/null
 source ${HOME}/.bashrc
 
 cp -rfp inventory/sample inventory/mycluster
