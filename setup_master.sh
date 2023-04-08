@@ -78,7 +78,7 @@ sed -i "s/# docker_cgroup_driver: systemd/docker_cgroup_driver: systemd/g" inven
 
 # automatically disable swap partition
 ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml -K
-sleep 180
+sleep 120
 cd ~
 
 # enable kubectl in admin account and root
