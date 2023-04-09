@@ -10,12 +10,13 @@
 ### 4. install uyuni infra
 ### 5. install uyuni suite
 -----------------------
-## how to add worker nodes
+## how to add master/worker nodes
 ### 1. run setup.sh up to specific lines
 ### 2. In master node, edit $HOME/kubespray/inventory/mycluster/host.yaml.
 ### 3. copy master's administrator's public key to worker node
 ### 4. add worker node into k8s using ansible command
 ### 5. In uyuni dashboard, add worker node.
+### 6. After you join additional masters, copy /etc/kubernetes/admin.conf to administrator's $HOME/.kube. Then configure HAproxy + keepalived
 -----------------------
 ## how to remove uyuni-infra and uyuni-suite completely
 ### 1. helmfile --environment test -l type=app destroy
