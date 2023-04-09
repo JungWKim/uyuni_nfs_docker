@@ -25,3 +25,6 @@
 ## keycloak domain : http://???.???.???.???:30090
 ### default ID : Admin
 ### default PW : xiilabPassword3# or keycloak12345
+----------------------
+## when the bootstrap master node is dead
+### - delete every pod of each statefulset
