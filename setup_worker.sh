@@ -12,7 +12,7 @@ sudo systemctl stop ufw
 sudo systemctl disable ufw
 
 # install basic packages
-sudo apt install -y net-tools nfs-common whois
+sudo apt install -y nfs-common whois
 
 # network configuration
 sudo modprobe overlay \
