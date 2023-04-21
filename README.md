@@ -11,7 +11,7 @@
 ### 5. install uyuni suite
 -----------------------
 ## how to add master/worker nodes
-### 1. run setup.sh up to specific lines
+### 1. run add_node.sh up to specific lines
 ### 2. In master node, edit $HOME/kubespray/inventory/mycluster/host.yaml.
 ### 3. copy master's administrator's public key to worker node
 ### 4. add worker node into k8s using ansible command
