@@ -78,7 +78,7 @@ sed -i "s/# cri_dockerd_enabled: false/cri_dockerd_enabled: false/g" inventory/m
 sed -i "s/# docker_cgroup_driver: systemd/docker_cgroup_driver: systemd/g" inventory/mycluster/group_vars/all/docker.yml
 sed -i "s/container_manager: containerd/container_manager: docker/g" roles/kubespray-defaults/defaults/main.yaml
 sed -i "s/# container_manager: containerd/container_manager: docker/g" inventory/mycluster/group_vars/all/etcd.yml
-sed -i "s/etcd_deployment_type: containerd/etcd_deployment_type: docker/g" inventory/mycluster/group_vars/all/etcd.yml
+sed -i "s/etcd_deployment_type: host/etcd_deployment_type: docker/g" inventory/mycluster/group_vars/all/etcd.yml
 
 # enable kubectl & kubeadm auto-completion
 echo "source <(kubectl completion bash)" >> ${HOME}/.bashrc
