@@ -18,6 +18,7 @@ sudo systemctl stop ufw
 sudo systemctl disable ufw
 
 # install basic packages
+sudo apt update
 sudo apt install -y nfs-common whois
 
 # network configuration
