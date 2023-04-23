@@ -1,4 +1,11 @@
-## * before you run this script,
+## Summary
+### k8s : 1.24.6
+### cni : calico
+### cri : docker latest version
+### os : ubuntu 22.04
+### provisioner : nfs
+---------------------
+## before you run this script
 ### - prepare nfs server which provides /data directory
 ### - do not run this script as root or sudo
 ### - you can create only one administrator account
