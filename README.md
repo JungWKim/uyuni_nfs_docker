@@ -32,7 +32,7 @@
 ### 1. helmfile --environment default -l type=app destroy
 ### 2. helmfile --environment default -l type=base destroy
 ### 3. helmfile --environment default -l app=<app-name> destroy
-### 3. delete every pvcs, pvs and files, configmaps, secrets in nfs server
+### 4. delete every pvcs, pvs and files, configmaps, secrets in nfs server
 ----------------------
 ## keycloak domain : http://???.???.???.???:30090
 ### default ID : Admin
