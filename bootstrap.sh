@@ -108,7 +108,7 @@ sudo mv helmfile /usr/bin/
 rm LICENSE && rm README.md && rm helmfile_0.150.0_linux_amd64.tar.gz
 
 # deploy uyuni infra - this process consumes 33G.
-git clone -b develop https://github.com/xiilab/Uyuni_Deploy.git
+git clone -b release-0.4 https://github.com/xiilab/Uyuni_Deploy.git
 cd ~/Uyuni_Deploy
 
 sed -i "s/192.168.56.13/${NFS_IP}/g" environments/default/values.yaml
